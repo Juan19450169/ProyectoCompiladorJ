@@ -141,3 +141,5 @@ public class ProyectoCompi extends JFrame {
         });
     }
 }
+/*
+//El dia de hoy domingo a las 11:57 horas terminamos de subir el codigo con los reuqerimientos que nos solicito en la actividad Actividad 22 . att: Alejandro*/
