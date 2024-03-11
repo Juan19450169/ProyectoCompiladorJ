@@ -149,3 +149,5 @@ public class ProyectoCompi extends JFrame {
 
 /*Esto es una prueba con el Ing Esaul siendo las 08:42 horas del dia lunes 11 de marzo del 2024 
 en el aula de clase en el instituto tecnologico de zacatecas*/
+
+/*Prueba 2*/
