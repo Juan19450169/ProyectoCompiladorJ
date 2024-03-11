@@ -4,17 +4,96 @@
  */
 package proyectocompi;
 
-/**
- *
- * @author juans
- */
-public class ProyectoCompi {
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class ProyectoCompi extends JFrame {
+
+    private JTextArea txtContenido;
+    private JTextArea txtMensajes;
+
+    public ProyectoCompi() {
+        initComponents();
     }
-    
+
+    private void initComponents() {
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("Proyecto de Apertura de Archivo");
+
+        txtContenido = new JTextArea();
+        JScrollPane scrollContenido = new JScrollPane(txtContenido);
+
+        txtMensajes = new JTextArea();
+        JScrollPane scrollMensajes = new JScrollPane(txtMensajes);
+
+        JMenuBar menuBar = new JMenuBar();
+        setJMenuBar(menuBar);
+
+        JMenu menuProcesar = new JMenu("Procesar");
+        menuBar.add(menuProcesar);
+
+        JMenuItem menuItemSeparar = new JMenuItem("Separar");
+        menuProcesar.add(menuItemSeparar);
+
+        menuItemSeparar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                separarRegExp();
+            }
+        });
+
+        GroupLayout layout = new GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addComponent(scrollContenido, GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                    .addComponent(scrollMensajes))
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(scrollContenido, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(scrollMensajes, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(20, Short.MAX_VALUE))
+        );
+
+        pack();
+    }
+
+    private void separarRegExp() {
+        String contenido = txtContenido.getText();
+        txtMensajes.setText(""); // Limpiar el área de mensajes
+
+        // Expresión regular para identificar identificadores de variables y números
+        String regex = "\\b([a-zA-Z_]\\w*|\\d+(\\.\\d+)?)\\b";
+
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(contenido);
+
+        while (matcher.find()) {
+            String encontrado = matcher.group();
+            txtMensajes.append(encontrado + "\n");
+        }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new ProyectoCompi().setVisible(true);
+            }
+        });
+    }
 }
