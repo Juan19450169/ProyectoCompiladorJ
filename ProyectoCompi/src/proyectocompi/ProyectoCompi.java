@@ -10,8 +10,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class ProyectoCompi extends JFrame {
 
@@ -34,6 +36,19 @@ public class ProyectoCompi extends JFrame {
 
         JMenuBar menuBar = new JMenuBar();
         setJMenuBar(menuBar);
+
+        JMenu menuArchivo = new JMenu("Archivo");
+        menuBar.add(menuArchivo);
+
+        JMenuItem menuItemAbrir = new JMenuItem("Abrir");
+        menuArchivo.add(menuItemAbrir);
+
+        menuItemAbrir.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                abrirArchivo();
+            }
+        });
 
         JMenu menuProcesar = new JMenu("Procesar");
         menuBar.add(menuProcesar);
@@ -70,6 +85,35 @@ public class ProyectoCompi extends JFrame {
         );
 
         pack();
+    }
+
+    private void abrirArchivo() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Archivos de texto", "txt"));
+
+        int result = fileChooser.showOpenDialog(this);
+
+        if (result == JFileChooser.APPROVE_OPTION) {
+            try {
+                BufferedReader reader = new BufferedReader(new FileReader(fileChooser.getSelectedFile()));
+                StringBuilder content = new StringBuilder();
+                String line;
+
+                while ((line = reader.readLine()) != null) {
+                    content.append(line).append("\n");
+                }
+
+                // Mostrar contenido en el área de texto principal
+                txtContenido.setText(content.toString());
+
+                // Limpiar el área de mensajes al abrir un nuevo archivo
+                txtMensajes.setText("");
+
+                reader.close();
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Error al abrir el archivo.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 
     private void separarRegExp() {
