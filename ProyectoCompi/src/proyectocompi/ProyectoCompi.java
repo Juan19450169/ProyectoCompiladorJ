@@ -90,7 +90,6 @@ public class ProyectoCompi extends JFrame {
     private void abrirArchivo() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileFilter(new FileNameExtensionFilter("Archivos de texto", "txt"));
-
         int result = fileChooser.showOpenDialog(this);
 
         if (result == JFileChooser.APPROVE_OPTION) {
@@ -121,7 +120,7 @@ public class ProyectoCompi extends JFrame {
         txtMensajes.setText(""); // Limpiar el área de mensajes
 
         // Expresión regular para identificar identificadores de variables y números
-        String regex = "\\b([a-zA-Z_]\\w*|\\d+(\\.\\d+)?)\\b";
+        String regex = "\\b([a-zA-Z_]\\w*|\\d+(\\.\\d+)?)\\b ";
 
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(contenido);
