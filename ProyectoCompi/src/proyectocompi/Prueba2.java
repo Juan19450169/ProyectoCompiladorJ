@@ -3,22 +3,21 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package proyectocompi;
-
-/**
- *
- * @author aleja
- */
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
 import java.util.regex.*;
 import javax.swing.*;
-public class TextProcessorGUI extends JFrame implements ActionListener {
+/**
+ *
+ * @author aleja
+ */
+public class Prueba2 extends JFrame implements ActionListener {
     private JButton openButton, processButton;
     private JTextArea textArea;
     
-    public TextProcessorGUI() {
+    public Prueba2() {
         setTitle("Text Processor");
         setSize(400, 300);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -118,7 +117,7 @@ public class TextProcessorGUI extends JFrame implements ActionListener {
     
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            TextProcessorGUI gui = new TextProcessorGUI();
+            Prueba2 gui = new Prueba2();
             gui.setVisible(true);
         });
     }
