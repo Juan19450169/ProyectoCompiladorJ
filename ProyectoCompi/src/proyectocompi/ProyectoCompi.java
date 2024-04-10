@@ -145,7 +145,7 @@ Pattern pattern = Pattern.compile("[a-zA-Z]\\w*|\\d+|[^a-zA-Z1-9\\s]");
 
 /*Esto es una prueba con el Ing Esaul siendo las 08:42 horas del dia lunes 11 de marzo del 2024 
 en el aula de clase en el instituto tecnologico de zacatecas*/
-
+    
 /*Se corrige el error que habia dado el dia 09/04/2024 eb el cual ya se puede correr*/
 
 /* 09 abril 2024 se suben los cambios del programa */
