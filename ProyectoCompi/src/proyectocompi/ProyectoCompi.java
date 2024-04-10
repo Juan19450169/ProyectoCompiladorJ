@@ -101,6 +101,7 @@ public class ProyectoCompi extends JFrame implements ActionListener{
         StringBuilder resultBuilder = new StringBuilder();
         // Expresión regular para identificar palabras, números y caracteres especiales
 Pattern pattern = Pattern.compile("[a-zA-Z]\\w*|\\d+|[^a-zA-Z1-9\\s]");
+//Pattern pattern = Pattern.compile("([a-zA-Z]\\w*)|([1-9]\\d*|0)|(\\)");
         Matcher matcher = pattern.matcher(text);
 
         while (matcher.find()) {
@@ -149,3 +150,4 @@ en el aula de clase en el instituto tecnologico de zacatecas*/
 /*Se corrige el error que habia dado el dia 09/04/2024 eb el cual ya se puede correr*/
 
 /* 09 abril 2024 se suben los cambios del programa */
+/* Comit del 10 de abril del 2024*/
