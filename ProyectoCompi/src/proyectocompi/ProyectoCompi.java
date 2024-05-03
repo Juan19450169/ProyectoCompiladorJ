@@ -19,12 +19,30 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 import javax.swing.filechooser.FileNameExtensionFilter;
+// Clase para representar un lexema junto con su identificador
+class Lexema {
+    private String lexema;
+    private int identificador;
 
+    public Lexema(String lexema, int identificador) {
+        this.lexema = lexema;
+        this.identificador = identificador;
+    }
+
+    public String getLexema() {
+        return lexema;
+    }
+
+    public int getIdentificador() {
+        return identificador;
+    }
+}
 public class ProyectoCompi extends JFrame implements ActionListener{
 
-     private JButton processButton;
+    private JButton lexemaButton, processButton;
     private JTextArea textArea, resultArea;
     private JScrollPane scrollPane, resultScrollPane;
+    private List<Lexema> lexemas;
 
     public ProyectoCompi() {
         setTitle("Text Processor");
