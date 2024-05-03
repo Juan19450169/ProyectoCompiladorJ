@@ -231,3 +231,6 @@ en el aula de clase en el instituto tecnologico de zacatecas*/
 
 /* 09 abril 2024 se suben los cambios del programa */
 /* Comit del 10 de abril del 2024*/
+
+//Ultima modificacion el dia 02 de mayo en donde se agrega la funcionalidad de los lexemas al codigo
+//Ya podemos leer los lexemas con su propio identificador
