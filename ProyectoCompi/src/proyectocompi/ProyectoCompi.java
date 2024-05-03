@@ -42,9 +42,7 @@ public class ProyectoCompi extends JFrame implements ActionListener{
     private JButton lexemaButton, processButton;
     private JTextArea textArea, resultArea;
     private JScrollPane scrollPane, resultScrollPane;
-    private Map<String, String> lexemaNumeroMap;
-
-    private List<Lexema> lexemas;
+     private List<Lexema> lexemas;
 
 
     public ProyectoCompi() {
