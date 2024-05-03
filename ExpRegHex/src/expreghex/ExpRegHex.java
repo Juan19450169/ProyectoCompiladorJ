@@ -17,16 +17,16 @@ public class ExpRegHex {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-           String cadena = "hola+masmundo*adios123-algo_666perro";
+           String cadena = "-123.var_56_x;28+";
 
         // Imprimir la cadena completa
         System.out.println("Cadena completa: " + cadena);
 
         // Encontrar e imprimir los identificadores
-        Pattern patron = Pattern.compile("\\b[a-zA-Z_][a-zA-Z0-9_]*\\b");
+        Pattern patron = Pattern.compile("[a-zA-Z]\\w*|[1-9]\\d*");
         Matcher matcher = patron.matcher(cadena);
 
-        System.out.println("Identificadores encontrados:");
+        System.out.println("ID VALIDOS:");
         while (matcher.find()) {
             String identificador = matcher.group();
             System.out.println(identificador);

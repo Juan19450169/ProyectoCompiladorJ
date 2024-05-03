@@ -13,6 +13,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
@@ -23,8 +25,25 @@ public class ProyectoCompi extends JFrame implements ActionListener{
      private JButton processButton;
     private JTextArea textArea, resultArea;
     private JScrollPane scrollPane, resultScrollPane;
+    private Map<String, String> lexemaNumeroMap;
 
     public ProyectoCompi() {
+        lexemaNumeroMap = new HashMap<>();
+        lexemaNumeroMap.put("start", "101");
+        lexemaNumeroMap.put("begin", "102");
+        lexemaNumeroMap.put("finish", "103");
+        lexemaNumeroMap.put("int", "104");
+        lexemaNumeroMap.put("str", "105");
+        lexemaNumeroMap.put("input", "106");
+        lexemaNumeroMap.put("output", "107");
+        lexemaNumeroMap.put("if", "108");
+        lexemaNumeroMap.put("then", "109");
+        lexemaNumeroMap.put("else", "110");
+        lexemaNumeroMap.put("loop", "111");
+        lexemaNumeroMap.put("end", "112");
+        lexemaNumeroMap.put("do", "113");
+        lexemaNumeroMap.put("repeat", "114");
+        
         setTitle("Text Processor");
         setSize(800, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
