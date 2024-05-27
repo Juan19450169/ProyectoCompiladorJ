@@ -1,0 +1,7 @@
+Follow(A)={begin,identificador,input,output,if,loop,repeat}
+Follow(nueva3)={+,-,do,==,<>,>,>=,<,<=,,,),finish,end,else,;,then}
+Follow(nueva2)={do,==,<>,>,>=,<,<=,,,),finish,end,else,then}
+Follow(nueva4)={;,)}
+Follow(nueva5)={)}
+Follow(nueva6)={end}
+Follow(C)={finish,;,end,else}

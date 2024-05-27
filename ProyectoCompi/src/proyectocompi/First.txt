@@ -1,0 +1,7 @@
+First(A)={int,str}+ε
+First(nueva3)={*,/}+ε
+First(nueva2)={+,-}+ε
+First(nueva4)={,}+ε
+First(nueva5)={,}+ε
+First(nueva6)={;}+ε
+First(C)={else}+ε
