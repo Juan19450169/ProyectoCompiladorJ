@@ -4,7 +4,6 @@
  */
 package proyectocompi;
 
-
 import java.awt.BorderLayout;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -12,98 +11,31 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.ArrayList; 
-import java.util.List;
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
-import javax.swing.filechooser.FileNameExtensionFilter;
+import java.util.ArrayList;
+import java.util.List;
+
 // Clase para representar un lexema junto con su identificador
-class Lexema {
-    private String lexema;
-    private int identificador;
 
-    public Lexema(String lexema, int identificador) {
-        this.lexema = lexema;
-        this.identificador = identificador;
-    }
-
-    public String getLexema() {
-        return lexema;
-    }
-
-    public int getIdentificador() {
-        return identificador;
-    }
-}
 public class ProyectoCompi extends JFrame implements ActionListener{
 
      private JTextArea textArea, resultArea;
     private JScrollPane scrollPane, resultScrollPane;
     private List<Lexema> lexemas;
-
+    private TextProcessor textProcessor;
 
     public ProyectoCompi() {
-        
         setTitle("Text Processor");
         setSize(800, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        // Lista de lexemas con sus identificadores
-        lexemas = new ArrayList<>();
-        lexemas.add(new Lexema("start", 101));
-        lexemas.add(new Lexema("begin", 102));
-        lexemas.add(new Lexema("finish", 103));
-        lexemas.add(new Lexema("int", 104));
-        lexemas.add(new Lexema("str", 105));
-        lexemas.add(new Lexema("input", 106));
-        lexemas.add(new Lexema("output", 107));
-        lexemas.add(new Lexema("if", 108));
-        lexemas.add(new Lexema("then", 109));
-        lexemas.add(new Lexema("else", 110));
-        lexemas.add(new Lexema("loop", 111));
-        lexemas.add(new Lexema("end", 112));
-        lexemas.add(new Lexema("do", 113));
-        lexemas.add(new Lexema("repeat", 114));
-        lexemas.add(new Lexema("+", 201));
-        lexemas.add(new Lexema("-", 202));
-        lexemas.add(new Lexema("*", 203));
-        lexemas.add(new Lexema("/", 204));
-        lexemas.add(new Lexema(":=", 205));
-        lexemas.add(new Lexema("=", 206));  // Agregado "=" como lexema individual
-        lexemas.add(new Lexema("==", 301));
-        lexemas.add(new Lexema("<>", 302));
-        lexemas.add(new Lexema(">", 303));
-        lexemas.add(new Lexema(">=", 304));
-        lexemas.add(new Lexema("<", 305));
-        lexemas.add(new Lexema("<=", 306));
-        lexemas.add(new Lexema(";", 401));
-        lexemas.add(new Lexema("(", 402));
-        lexemas.add(new Lexema(")", 403));
-        lexemas.add(new Lexema(",", 501));
+        // Inicializar lexemas y el procesador de texto
+        initializeLexemas();
+        textProcessor = new TextProcessor(lexemas);
 
-        JMenuBar menuBar = new JMenuBar();
-        JMenu fileMenu = new JMenu("Archivo");
-        JMenuItem openMenuItem = new JMenuItem("Abrir");
-        openMenuItem.addActionListener(this);
-        fileMenu.add(openMenuItem);
-        JMenuItem exitMenuItem = new JMenuItem("Salir");
-        exitMenuItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
-        fileMenu.add(exitMenuItem);
-        menuBar.add(fileMenu);
-
-        JMenu processMenu = new JMenu("Procesar");
-        JMenuItem processMenuItem = new JMenuItem("Procesar Texto");
-        processMenuItem.addActionListener(this);
-        processMenu.add(processMenuItem);
-        menuBar.add(processMenu);
-
+        // Configuración de la interfaz gráfica
+        JMenuBar menuBar = createMenuBar();
         setJMenuBar(menuBar);
 
         textArea = new JTextArea();
@@ -128,6 +60,61 @@ public class ProyectoCompi extends JFrame implements ActionListener{
         add(splitPane, BorderLayout.CENTER);
     }
 
+    private void initializeLexemas() {
+        lexemas = new ArrayList<>();
+        lexemas.add(new Lexema("start", 101));
+        lexemas.add(new Lexema("begin", 102));
+        lexemas.add(new Lexema("finish", 103));
+        lexemas.add(new Lexema("int", 104));
+        lexemas.add(new Lexema("str", 105));
+        lexemas.add(new Lexema("input", 106));
+        lexemas.add(new Lexema("output", 107));
+        lexemas.add(new Lexema("if", 108));
+        lexemas.add(new Lexema("then", 109));
+        lexemas.add(new Lexema("else", 110));
+        lexemas.add(new Lexema("loop", 111));
+        lexemas.add(new Lexema("end", 112));
+        lexemas.add(new Lexema("do", 113));
+        lexemas.add(new Lexema("repeat", 114));
+        lexemas.add(new Lexema("+", 201));
+        lexemas.add(new Lexema("-", 202));
+        lexemas.add(new Lexema("*", 203));
+        lexemas.add(new Lexema("/", 204));
+        lexemas.add(new Lexema(":=", 205));
+        lexemas.add(new Lexema("=", 206)); // Agregado "=" como lexema individual
+        lexemas.add(new Lexema("==", 301));
+        lexemas.add(new Lexema("<>", 302));
+        lexemas.add(new Lexema(">", 303));
+        lexemas.add(new Lexema(">=", 304));
+        lexemas.add(new Lexema("<", 305));
+        lexemas.add(new Lexema("<=", 306));
+        lexemas.add(new Lexema(";", 401));
+        lexemas.add(new Lexema("(", 402));
+        lexemas.add(new Lexema(")", 403));
+        lexemas.add(new Lexema(",", 501));
+    }
+
+    private JMenuBar createMenuBar() {
+        JMenuBar menuBar = new JMenuBar();
+        JMenu fileMenu = new JMenu("Archivo");
+        JMenuItem openMenuItem = new JMenuItem("Abrir");
+        openMenuItem.addActionListener(this);
+        fileMenu.add(openMenuItem);
+        JMenuItem exitMenuItem = new JMenuItem("Salir");
+        exitMenuItem.addActionListener(e -> System.exit(0));
+        fileMenu.add(exitMenuItem);
+        menuBar.add(fileMenu);
+
+        JMenu processMenu = new JMenu("Procesar");
+        JMenuItem processMenuItem = new JMenuItem("Procesar Texto");
+        processMenuItem.addActionListener(this);
+        processMenu.add(processMenuItem);
+        menuBar.add(processMenu);
+
+        return menuBar;
+    }
+
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("Abrir")) {
             JFileChooser fileChooser = new JFileChooser();
@@ -150,46 +137,9 @@ public class ProyectoCompi extends JFrame implements ActionListener{
             }
         } else if (e.getActionCommand().equals("Procesar Texto")) {
             String text = textArea.getText();
-            String processedText = processText(text);
+            String processedText = textProcessor.processText(text);
             resultArea.setText(processedText);
         }
-    }
-
-    private String processText(String text) {
-        StringBuilder resultBuilder = new StringBuilder();
-        // Expresión regular para identificar palabras, números y caracteres especiales
-        Pattern pattern = Pattern.compile("([a-zA-Z]\\w*)|([1-9]\\d*|[0])|:=|==|<>|>=|<=|\\+|\\-|\\*|\\/|=|_|;|,|\\(|\\)|>|<|(\\.)");
-        Matcher matcher = pattern.matcher(text);
-
-        resultBuilder.append("Lexema\tIdentificador\n"); // Encabezado de columnas
-
-        while (matcher.find()) {
-            String group = matcher.group();
-            boolean found = false;
-            for (Lexema lexema : lexemas) {
-                if (lexema.getLexema().equals(group)) {
-                    resultBuilder.append(lexema.getLexema()).append("\t").append(lexema.getIdentificador()).append("\n");
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                if (group.matches("\\d+")) {
-                    resultBuilder.append(group).append("\t2\n");
-                } else {
-                    resultBuilder.append(group).append("\t1\n");
-                }
-            }
-        }
-
-        return resultBuilder.toString();
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            ProyectoCompi gui = new ProyectoCompi();
-            gui.setVisible(true);
-        });
     }
 }
 
