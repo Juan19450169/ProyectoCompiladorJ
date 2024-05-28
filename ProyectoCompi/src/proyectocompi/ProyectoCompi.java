@@ -81,7 +81,7 @@ public class ProyectoCompi extends JFrame implements ActionListener{
         lexemas.add(new Lexema("*", 203));
         lexemas.add(new Lexema("/", 204));
         lexemas.add(new Lexema(":=", 205));
-        lexemas.add(new Lexema("=", 206)); // Agregado "=" como lexema individual
+       // lexemas.add(new Lexema("=", 206)); // Agregado "=" como lexema individual
         lexemas.add(new Lexema("==", 301));
         lexemas.add(new Lexema("<>", 302));
         lexemas.add(new Lexema(">", 303));
