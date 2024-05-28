@@ -39,10 +39,9 @@ class Lexema {
 }
 public class ProyectoCompi extends JFrame implements ActionListener{
 
-    private JButton lexemaButton, processButton;
-    private JTextArea textArea, resultArea;
+     private JTextArea textArea, resultArea;
     private JScrollPane scrollPane, resultScrollPane;
-     private List<Lexema> lexemas;
+    private List<Lexema> lexemas;
 
 
     public ProyectoCompi() {
@@ -73,6 +72,7 @@ public class ProyectoCompi extends JFrame implements ActionListener{
         lexemas.add(new Lexema("*", 203));
         lexemas.add(new Lexema("/", 204));
         lexemas.add(new Lexema(":=", 205));
+        lexemas.add(new Lexema("=", 206));  // Agregado "=" como lexema individual
         lexemas.add(new Lexema("==", 301));
         lexemas.add(new Lexema("<>", 302));
         lexemas.add(new Lexema(">", 303));
@@ -106,26 +106,26 @@ public class ProyectoCompi extends JFrame implements ActionListener{
 
         setJMenuBar(menuBar);
 
-        lexemaButton = new JButton("Lexema");
-        lexemaButton.addActionListener(this);
-
-        processButton = new JButton("Procesar");
-        processButton.addActionListener(this);
-
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.add(lexemaButton);
-        buttonPanel.add(processButton);
-
         textArea = new JTextArea();
+        textArea.setLineWrap(true); // Ajuste de línea
+        textArea.setWrapStyleWord(true); // Ajuste de palabra
         resultArea = new JTextArea();
         resultArea.setEditable(false);
+        resultArea.setLineWrap(true); // Ajuste de línea
+        resultArea.setWrapStyleWord(true); // Ajuste de palabra
 
         scrollPane = new JScrollPane(textArea);
-        resultScrollPane = new JScrollPane(resultArea);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
-        add(buttonPanel, BorderLayout.NORTH);
-        add(scrollPane, BorderLayout.CENTER);
-        add(resultScrollPane, BorderLayout.SOUTH);
+        resultScrollPane = new JScrollPane(resultArea);
+        resultScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        resultScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, scrollPane, resultScrollPane);
+        splitPane.setResizeWeight(0.5); // Ajusta la proporción inicial entre los paneles
+
+        add(splitPane, BorderLayout.CENTER);
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -152,59 +152,32 @@ public class ProyectoCompi extends JFrame implements ActionListener{
             String text = textArea.getText();
             String processedText = processText(text);
             resultArea.setText(processedText);
-        } else if (e.getActionCommand().equals("Lexema")) {
-            String text = textArea.getText();
-            String processedText = processLexema(text);
-            resultArea.setText(processedText);
         }
     }
 
     private String processText(String text) {
         StringBuilder resultBuilder = new StringBuilder();
         // Expresión regular para identificar palabras, números y caracteres especiales
-        Pattern pattern = Pattern.compile("[a-zA-Z]\\w*|\\d+|[^a-zA-Z1-9\\s]");
-        Matcher matcher = pattern.matcher(text);
-
-        while (matcher.find()) {
-            String group = matcher.group();
-            if (group.matches("\\d+") && group.length() > 1 && group.startsWith("0")) {
-                // Si es un número que comienza con 0, separar el 0 y los otros dígitos
-                resultBuilder.append("0").append("\n");
-                group = group.substring(1);
-            }
-            // Si hay un guión seguido de un número, separarlos
-            if (group.matches("-\\d+")) {
-                resultBuilder.append("-").append("\n");
-                group = group.substring(1);
-            }
-            // Si hay un guión bajo seguido de un número, separarlos
-            if (group.matches("_\\d+")) {
-                resultBuilder.append("_").append("\n");
-                group = group.substring(1);
-            }
-            resultBuilder.append(group).append("\n");
-        }
-
-        // Reemplazar "< >" con "<>"
-        String processedText = resultBuilder.toString().replaceAll("<\n>\n", "<>\n");
-
-        return processedText;
-    }
-
-    private String processLexema(String text) {
-        StringBuilder resultBuilder = new StringBuilder();
-        // Expresión regular para identificar palabras, números y caracteres especiales
-        Pattern pattern = Pattern.compile("[a-zA-Z]\\w*|\\d+|[^a-zA-Z1-9\\s]");
+        Pattern pattern = Pattern.compile("([a-zA-Z]\\w*)|([1-9]\\d*|[0])|:=|==|<>|>=|<=|\\+|\\-|\\*|\\/|=|_|;|,|\\(|\\)|>|<|(\\.)");
         Matcher matcher = pattern.matcher(text);
 
         resultBuilder.append("Lexema\tIdentificador\n"); // Encabezado de columnas
 
         while (matcher.find()) {
             String group = matcher.group();
+            boolean found = false;
             for (Lexema lexema : lexemas) {
                 if (lexema.getLexema().equals(group)) {
                     resultBuilder.append(lexema.getLexema()).append("\t").append(lexema.getIdentificador()).append("\n");
+                    found = true;
                     break;
+                }
+            }
+            if (!found) {
+                if (group.matches("\\d+")) {
+                    resultBuilder.append(group).append("\t2\n");
+                } else {
+                    resultBuilder.append(group).append("\t1\n");
                 }
             }
         }
