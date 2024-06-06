@@ -11,7 +11,7 @@ import javax.swing.SwingUtilities;
 public class Main {
       public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            ProyectoCompi gui = new ProyectoCompi();
+            Compilador gui = new Compilador();
             gui.setVisible(true);
         });
     }
