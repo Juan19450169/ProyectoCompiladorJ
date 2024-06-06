@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package proyectocompi;
+import java.util.List;
 
 /**
  *
@@ -10,19 +11,32 @@ package proyectocompi;
  */
 public class Sintactico {
 
-    private int token;
+    private List<Guardadito> guardadossintacticos;
+         private int indice =0;
+///////////////////////////////////////////////////////////////////7
+    public Sintactico(List<Guardadito> guardadossintacticos) {
+        this.guardadossintacticos = guardadossintacticos;
+    }
+   ///////////////////////////////////////////////////////////////////
+    private int gettoken(){
+        Guardadito g= guardadossintacticos.get(indice++);
+        return g.getToken();
+    }
+
+     private int token;
 
     //<Programa>→start<A><sentencia>finish
     //<Programa>→101<A><sentencia>103
     public void Programa() {
         token = gettoken();
         if (token != 101) {
-            //Lanzar un error
+            System.out.println("Error");
         }
         token = gettoken();
         A();
         sentencia();
         if (token != 103) {
+             System.out.println(" se esperaba finish en este caso");
             //Lanzar un error por que se esperaba finish en este caso
 
         } else {
@@ -43,6 +57,7 @@ public class Sintactico {
         List_id();
         if (token != 401) {
             //mandar mensaje de error
+            System.out.println("Error tontuelo");
         }
         token = gettoken();
         A();
@@ -82,6 +97,8 @@ public class Sintactico {
             break;
 
             default:
+                System.out.println("Error tontuelo ningun token coincidio");
+
                 //mandar un mensaje de error debido a que ningun token coincidio por eso el msj de error
                 
         }
@@ -93,6 +110,16 @@ public class Sintactico {
     //<Tipo>→str
     //<Tipo>→104
     //<Tipo>→105
+    public void Tipo(){
+        if (token == 104 || token == 105){
+           token = gettoken(); 
+        }else{
+            //mensaje de error
+            System.out.println("Error tontuelo");
+
+        }
+        
+    }
     
     //////////////////////////////////////////////////////////////////////////
     //<Termino>→<Factor><nueva3>
@@ -125,6 +152,8 @@ public class Sintactico {
            token = gettoken(); 
         }else{
             //mensaje de error 
+            System.out.println("Error tontuelo");
+
         }
         
     }
@@ -148,5 +177,154 @@ public class Sintactico {
         Expresion();
     }
     
-  
+    ////////////////////////////////////
+    //<D>→+
+    //<D>→-
+    //<D>→201
+    //<D>→202
+    public void D(){
+        if (token == 201 || token == 202){
+           token = gettoken(); 
+        }else{
+            System.out.println("Error tontuelo");
+        }
+    }
+    //////////////////////////////////////////////////////
+    //<List_id>→identificador<nueva4>
+    //<List_id>→1<nueva4>
+
+    //////////////////////////////////////////////////////
+    public void List_id(){
+         if (token != 1) {
+            //mandar mensaje de error
+            System.out.println("Error tontuelo");
+        }
+        token = gettoken();
+        nueva4();
+    }
+    /////////////////////////////////////////////////////////
+    //<nueva4>→ε
+    //<nueva4>→,<List_id>
+    //<nueva4>→501<List_id>
+
+    //Follow(nueva4)={;,)}
+     //Follow(nueva4)={401,403}
+
+    public void nueva4(){
+        if(token==401 || token == 403){
+            return;
+        }
+        if (token != 501) {
+            //mandar mensaje de error
+            System.out.println("Error tontuelo");
+        }
+        List_id();
+        
+    }
+    
+    
+    //////////////////////////////////////////////////////
+   // <List_expre>→<Expresión><nueva5>
+    public void List_expre(){
+        Expresion();
+        nueva5();
+    }
+    
+    ///////////////////////////////////////////////////////
+    //<nueva5>→ε
+    //<nueva5>→,<List_expre>
+    //Follow(nueva5)={)}
+    public void nueva5(){
+        if (token != 403){
+            return;
+        }
+        if (token != 501) {
+            //mandar mensaje de error
+            System.out.println("Error tontuelo");
+        }
+        List_expre();
+    }
+    ///////////////////////////////////////////////////
+    ///////////////////////////////////////////////////
+    //////////////////////////////////////////////////
+    /////////////////////////////////////////////////
+    ///////////////////////////////////////////////
+    /////////////////////////////////////////////
+    ////////////////////////////////////////////
+    //
+    //<Factor>→numero
+    //<Factor>→(<Expresión>)
+    //<Factor>→identificador
+    public void Factor(){
+        switch (token) {
+            case 2:
+            case 402:
+            token = gettoken();
+            Expresion();
+            if (token != 403){
+                System.out.println("Se esperaba el parentesis que cierra");
+            }
+            case 1:
+            
+        }
+    }
+    //<B>→<sentencia><nueva6>
+
+    public void B(){
+        sentencia();
+        nueva6();
+    }
+    ///////////////////////////////////////////////////////
+   // <nueva6>→ε
+    //<nueva6>→;<B>
+    //<nueva6>→401<B>
+    //Follow(nueva6)={end}
+    //Follow(nueva6)={112}
+    public void nueva6(){
+         if (token != 112){
+            return;
+        }
+         if (token != 401) {
+            //mandar mensaje de error
+            System.out.println("Error tontuelo");
+        }
+         B();
+    }
+    /////////////////////////////////////////////////////
+    //<C>→else<sentencia>
+     //<C>→110<sentencia>
+    //<C>→ε
+    //Follow(C)={finish,;,end,else}
+    //Follow(C)={103,401,112,110}
+    public void C(){
+        if (token == 103 || token == 401 || token == 112 || token == 110){
+           return; 
+        }
+        if (token != 110) {
+            //mandar mensaje de error
+            System.out.println("Error hijo");
+        }
+        sentencia();
+    }
+    
+    //////////////////////////////////////////////////////////
+ //<sentencia>→begin<B>end
+//<sentencia>→identificador:=<Expresión>
+//<sentencia>→input(<List_id>)
+//<sentencia>→output(<List_expre>)
+//<sentencia>→if<Condicion>then<sentencia><C>
+//<sentencia>→loop<Condicion>do<sentencia>
+//<sentencia>→repeat<Expresión>do<sentencia>
+    
+    
+    public void sentencia(){
+        
+    }
+    
+    
+    /////////////////////////////////////////////////////////7
+
+    
+    ////////////////////////////////////////////////////////
+    
 }
