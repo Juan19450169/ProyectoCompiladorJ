@@ -1,38 +1,38 @@
-<Programa>→start<A><sentencia>finish
-<A>→<Tipo><List_id>;<A>
+<Programa>→start<A><sentencia>finish //Listo
+<A>→<Tipo><List_id>;<A>//Listo
 <A>→ε
-<Condicion>→<Expresión><nueva1>
+<Condicion>→<Expresión><nueva1>//Listo
 <nueva1>→==<Expresión>
 <nueva1>→<><Expresión>
 <nueva1>→><Expresión>
 <nueva1>→>=<Expresión>
 <nueva1>→<<Expresión>
-<nueva1>→<=<Expresión>
+<nueva1>→<=<Expresión> //Listo
 <Tipo>→int
-<Tipo>→str
-<Termino>→<Factor><nueva3>
+<Tipo>→str//Listo
+<Termino>→<Factor><nueva3>//Listo
 <nueva3>→ε
-<nueva3>→<E><Termino>
+<nueva3>→<E><Termino>//Listo
 <E>→*
-<E>→/
+<E>→/             //Listo
 <Expresión>→<Termino><nueva2>
 <nueva2>→ε
-<nueva2>→<D><Expresión>
+<nueva2>→<D><Expresión> //Listo
 <D>→+
-<D>→-
-<List_id>→identificador<nueva4>
+<D>→-                   // Listo
+<List_id>→identificador<nueva4>   //Medio
 <nueva4>→ε
-<nueva4>→,<List_id>
-<List_expre>→<Expresión><nueva5>
+<nueva4>→,<List_id>               //Medio
+<List_expre>→<Expresión><nueva5>   //Listo
 <nueva5>→ε
-<nueva5>→,<List_expre>
+<nueva5>→,<List_expre>             //Medio
 <Factor>→numero
 <Factor>→(<Expresión>)
 <Factor>→identificador
-<B>→<sentencia><nueva6>
-<nueva6>→ε
-<nueva6>→;<B>
-<C>→else<sentencia>
+<B>→<sentencia><nueva6>        //Listo
+<nueva6>→ε                     //Medio
+<nueva6>→;<B>                  //Medio
+<C>→else<sentencia>            // medio
 <C>→ε
 <sentencia>→begin<B>end
 <sentencia>→identificador:=<Expresión>

@@ -114,5 +114,39 @@ public class Sintactico {
           E();
           Termino();
     }
+    
+    //<E>→*
+    //<E>→/
+    //<E>→203
+    //<E>→204
+    
+    public void E(){
+        if (token == 203 || token == 204){
+           token = gettoken(); 
+        }else{
+            //mensaje de error 
+        }
+        
+    }
+    //<Expresión>→<Termino><nueva2>
+  
+    public void Expresion(){
+        Termino();
+        nueva2();
+    }
+    
+      //<nueva2>→ε
+    //<nueva2>→<D><Expresión>
+    //Follow(nueva2)={do,==,<>,>,>=,<,<=,,,),finish,end,else,then}
+    //Follow(nueva2)={113,301,302,303,304,305,306,501,403,103,112,110,109}
+
+    public void nueva2(){
+        if (token == 113 || token == 301 || token == 302 || token == 303 || token == 304 || token == 305 || token == 306 || token== 501 || token == 403 || token == 103 || token == 112 || token == 110 || token == 109){
+            return;
+        }
+        D();
+        Expresion();
+    }
+    
   
 }
