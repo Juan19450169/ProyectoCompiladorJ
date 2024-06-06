@@ -23,37 +23,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
-class Guardadito {
-    private String datolex;
-    private int token;
-
-    public Guardadito(String datolex, int token) {
-        this.datolex = datolex;
-        this.token = token;
-    }
-
-    public String getDatolex() {
-        return datolex;
-    }
-
-    public int getToken() {
-        return token;
-    }
-
-    public void setDatolex(String datolex) {
-        this.datolex = datolex;
-    }
-
-    public void setToken(int token) {
-        this.token = token;
-    }
-
-    @Override
-    public String toString() {
-        return "Guardadito{" + "datolex=" + datolex + ", token=" + token + '}';
-    }
-}
-
+// Clase para representar un lexema junto con su identificador
 class Lexema {
     private String lexema;
     private int identificador;
@@ -74,17 +44,18 @@ class Lexema {
 
 public class Compilador extends JFrame implements ActionListener {
     private JTextArea textArea, resultArea;
+    private JScrollPane scrollPane, resultScrollPane;
     private List<Lexema> lexemas;
     private List<Guardadito> guardados;
 
     public Compilador() {
-        this.guardados = new ArrayList<>();
-
+        this.guardados = new ArrayList<Guardadito>();
         setTitle("Text Processor");
         setSize(800, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
+        // Lista de lexemas con sus identificadores
         lexemas = new ArrayList<>();
         lexemas.add(new Lexema("start", 101));
         lexemas.add(new Lexema("begin", 102));
@@ -105,7 +76,7 @@ public class Compilador extends JFrame implements ActionListener {
         lexemas.add(new Lexema("*", 203));
         lexemas.add(new Lexema("/", 204));
         lexemas.add(new Lexema(":=", 205));
-        lexemas.add(new Lexema("=", 206));
+        lexemas.add(new Lexema("=", 206));  // Agregado "=" como lexema individual
         lexemas.add(new Lexema("==", 301));
         lexemas.add(new Lexema("<>", 302));
         lexemas.add(new Lexema(">", 303));
@@ -140,23 +111,23 @@ public class Compilador extends JFrame implements ActionListener {
         setJMenuBar(menuBar);
 
         textArea = new JTextArea();
-        textArea.setLineWrap(true);
-        textArea.setWrapStyleWord(true);
+        textArea.setLineWrap(true); // Ajuste de línea
+        textArea.setWrapStyleWord(true); // Ajuste de palabra
         resultArea = new JTextArea();
         resultArea.setEditable(false);
-        resultArea.setLineWrap(true);
-        resultArea.setWrapStyleWord(true);
+        resultArea.setLineWrap(true); // Ajuste de línea
+        resultArea.setWrapStyleWord(true); // Ajuste de palabra
 
-        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane = new JScrollPane(textArea);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
-        JScrollPane resultScrollPane = new JScrollPane(resultArea);
+        resultScrollPane = new JScrollPane(resultArea);
         resultScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         resultScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, scrollPane, resultScrollPane);
-        splitPane.setResizeWeight(0.5);
+        splitPane.setResizeWeight(0.5); // Ajusta la proporción inicial entre los paneles
 
         add(splitPane, BorderLayout.CENTER);
     }
@@ -176,7 +147,7 @@ public class Compilador extends JFrame implements ActionListener {
                     }
                     textArea.setText(stringBuilder.toString());
                     reader.close();
-                               } catch (IOException ex) {
+                } catch (IOException ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(this, "Error al abrir el archivo", "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -190,10 +161,11 @@ public class Compilador extends JFrame implements ActionListener {
 
     private String processText(String text) {
         StringBuilder resultBuilder = new StringBuilder();
+        // Expresión regular para identificar palabras, números y caracteres especiales
         Pattern pattern = Pattern.compile("([a-zA-Z]\\w*)|([1-9]\\d*|[0])|:=|==|<>|>=|<=|\\+|\\-|\\*|\\/|=|_|;|,|\\(|\\)|>|<|(\\.)");
         Matcher matcher = pattern.matcher(text);
 
-        resultBuilder.append("Lexema\tIdentificador\n");
+        resultBuilder.append("Lexema\tIdentificador\n"); // Encabezado de columnas
 
         while (matcher.find()) {
             String group = matcher.group();
@@ -206,11 +178,10 @@ public class Compilador extends JFrame implements ActionListener {
                     break;
                 }
             }
-           
             if (!found) {
                 if (group.matches("\\d+")) {
                     resultBuilder.append(group).append("\t2\n");
-                    guardados.add(new Guardadito(group, 2));
+                    guardados.add(new Guardadito(group,2));
                 } else {
                     resultBuilder.append(group).append("\t1\n");
                     guardados.add(new Guardadito(group, 1));
@@ -218,26 +189,16 @@ public class Compilador extends JFrame implements ActionListener {
             }
         }
 
-        boolean correct = true;
-        for (Guardadito g : guardados) {
-            if (g.getToken() == -1) {
-                correct = false;
-                break;
-            }
-        }
+        // Realizar el análisis sintáctico
+        Sintactico sintactico = new Sintactico(guardados);
+        sintactico.Programa();
 
-        resultBuilder.append("\nMensajes de Sintaxis:\n");
-
-        for (Guardadito g : guardados) {
-            if (g.getToken() == -1) {
-                resultBuilder.append("Error: Se esperaba ").append(g.getDatolex()).append("\n");
-            }
-        }
-
-        if (correct) {
-            resultBuilder.append("\nEl código es correcto.");
+        // Comprobar si hay errores sintácticos
+        String errors = sintactico.getErrors();
+        if (!errors.isEmpty()) {
+            resultBuilder.append("\nErrores sintácticos:\n").append(errors);
         } else {
-            resultBuilder.append("\nSe encontraron errores en el código.");
+            resultBuilder.append("\nEl código es sintácticamente correcto.");
         }
 
         return resultBuilder.toString();
